@@ -1,137 +1,109 @@
-<!DOCTYPE html>
-<html lang="en">
-  <!-- this is the <head> section; not to be confused with the <header> section -->
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles/style4.css">
-    <title>Jasmin Keith Portfolio</title>
-  </head>
+Apache Install 
+  sudo dnf update -y
+  sudo dnf install httpd
+  Note Version
+  sudo httpd -v
+    Tells version
+  sudo systemctl start httpd
+  systemctl enable httpd
+  systemctl status httpd
+  34.125.2.166 external ip
+  Cd /var/www/html
+  sudo dnf update -y
+  sudo dnf install nano -y
+  /etc/httpd/conf.d/welcome.conf.
+    Ls
+  cd /usr/share/httpd/noindex/
+    Index.html is here!
+      Editing this changed the page
+  Created a new index.html in /var/www/html
+  All steps followed from project 1, save for above notes^
 
-  <body>
+  Installing PHP on Rocky Linux
+  sudo dnf update -y
+  sudo dnf module enable php:version from project 1
+  $ sudo dnf module enable php:version from project 1
+  $ sudo dnf install php php-cli php-gd php-curl php-zip php-mbstring
+  Added an index.php
+  cd /etc/httpd/conf
+    Ls : httpd.conf
+      Directoryindex: Make index.php first
+  All steps from project 1 were used, save for the above^
 
-      <header>
-          <h1 id="title">Project 2 Notes</h1> 
-      </header>
 
-      <article id="main_article">
-        <h2>Apache Install</h2>
-        <ol type="1">
-          <li>sudo dnf update -y
-          <li>sudo dnf install httpd
-          <li>Note Version
-          <li>sudo httpd -v
-          <li>Tells version
-          <li>sudo systemctl start httpd
-          <li>systemctl enable httpd
+MARIADB: 
+  sudo systemctl enable --now mariadb
+  systemctl status mariadb
+  Secure db server: sudo mysql_secure_installation
+  Password: made
+  Remove anonymous users? Y
+  Disallow root login remotely? Y
+  Reload privilege tables now? Y
+  Sudosu = root user
+  Whoami = tells you
+   mariadb -u root
+   create user 'webapp'@'localhost' identified by 'password';
+  MariaDB [(none)]> create database linuxdb;
+  MariaDB [(none)]> grant all privileges on linuxdb.* to 'webapp'@'localhost';
+    * is there so for every table this person has access
+  \q to quit
+  Exit to exit root user
+  mariadb -u webapp -p
+    Enter password: passworddas
+  Use linuxdb;
+  Ctrl L to clear screen
+  
+  
+  MariaDB [(linuxdb)]> create table distributions
+      -> (
+      -> id int unsigned not null auto_increment,
+      -> name varchar(150) not null,
+      -> developer varchar(150) not null,
+      -> founded date not null,
+      -> primary key (id)
+      -> );
+  Query OK, 0 rows affected (0.07 sec)
+  
+  MariaDB [(linuxdb)]> show tables;
+  MariaDB [(linuxdb)]> describe distributions;
 
-          <li>
-          <li>
-          <li>
-          systemctl status httpd
-          34.125.2.166 external ip
-          Cd /var/www/html
-          sudo dnf update -y
-          sudo dnf install nano -y
-          /etc/httpd/conf.d/welcome.conf.
-          Ls
-          cd /usr/share/httpd/noindex/
-          Index.html is here!
-          Editing this changed the page
-          Created a new index.html in /var/www/html
-          All steps followed from project 1, save for above notes^
-          Installing PHP on Rocky Linux
-          sudo dnf update -y
-          sudo dnf module enable php:version from project 1
-          $ sudo dnf module enable php:version from project 1
-          $ sudo dnf install php php-cli php-gd php-curl php-zip php-mbstring
-          Added an index.php
-          cd /etc/httpd/conf
-          Ls : httpd.conf
-          Directoryindex: Make index.php first
-          All steps from project 1 were used, save for the above^
-          MARIADB: 
-          sudo systemctl enable --now mariadb
-          systemctl status mariadb
-          Secure db server: sudo mysql_secure_installation
-          Password: made
-          Remove anonymous users? Y
-          Disallow root login remotely? Y
-          Reload privilege tables now? Y
-          Sudosu = root user
-          Whoami = tells you
-           mariadb -u root
-           create user 'webapp'@'localhost' identified by 'password';
-          MariaDB [(none)]> create database linuxdb;
-          MariaDB [(none)]> grant all privileges on linuxdb.* to 'webapp'@'localhost';
-          * is there so for every table this person has access
-          \q to quit
-          Exit to exit root user
-          mariadb -u webapp -p
-          Enter password: passworddas
-          Use linuxdb;
-          Ctrl L to clear screen
-          
-          
-          MariaDB [(linuxdb)]> create table distributions
-              -> (
-              -> id int unsigned not null auto_increment,
-              -> name varchar(150) not null,
-              -> developer varchar(150) not null,
-              -> founded date not null,
-              -> primary key (id)
-              -> );
-          Query OK, 0 rows affected (0.07 sec)
-          
-          MariaDB [(linuxdb)]> show tables;
-          MariaDB [(linuxdb)]> describe distributions;
-          
-          
-          
-          
-          
-          
-          MariaDB [(linuxdb)]> insert into distributions (name, developer, founded) values
-              -> ('Debian', 'The Debian Project', '1993-09-15'),
-              -> ('Ubuntu', 'Canonical Ltd.', '2004-10-20'),
-              -> ('Fedora', 'Fedora Project', '2003-11-06');
-          Query OK, 3 rows affected (0.004 sec)
-          Records: 3  Duplicates: 0  Warnings: 0
-          MariaDB [(linuxdb)]> select * from distributions;
-          
-          
-          
-          
-          
-          
-          
-          MariaDB [(linuxdb)]> alter table distributions
-           -> add packagemanager char(3) after name;
-          update distributions set packagemanager='APT' where id='1';
-          update distributions set packagemanager='APT' where id='2';
-          MariaDB [(linuxdb)]> update distributions set packagemanager='DNF' where id='3';
-          [jasmi@vm2-2023 html]$ sudo chown :apache login.php
-          Instead of chown :www-data
-          Sudo dnf install php-mysqli
-          
-          
-          WORDPRESS
-          php --version
-          mariadb --version
-          sudo dnf install php-curl php-xml php-imagick php-mbstring php-zip php-intl
-          Php-imagick did not work:
-          dnf install -y epel-release
-          dnf config-manager --set-enabled PowerTools
-          Sudo dnf install -y ImageMagick ImageMagick-devel
-          “You should add "extension=imagick.so" to php.ini” message
-          echo "extension=imagick.so" > /etc/php.d/20-imagick.ini
-          Did not work
-          Cd /etc
-          Sudo nano php.ini paste in “extension=imagick.so”
-          
-          Followed the instructions from project 1, save for the above notes^
-          
-        
+
+  MariaDB [(linuxdb)]> insert into distributions (name, developer, founded) values
+      -> ('Debian', 'The Debian Project', '1993-09-15'),
+      -> ('Ubuntu', 'Canonical Ltd.', '2004-10-20'),
+      -> ('Fedora', 'Fedora Project', '2003-11-06');
+  Query OK, 3 rows affected (0.004 sec)
+  Records: 3  Duplicates: 0  Warnings: 0
+  MariaDB [(linuxdb)]> select * from distributions;
+
+
+  MariaDB [(linuxdb)]> alter table distributions
+   -> add packagemanager char(3) after name;
+  update distributions set packagemanager='APT' where id='1';
+  update distributions set packagemanager='APT' where id='2';
+  MariaDB [(linuxdb)]> update distributions set packagemanager='DNF' where id='3';
+  [jasmi@vm2-2023 html]$ sudo chown :apache login.php
+  Instead of chown :www-data
+  Sudo dnf install php-mysqli
+
+
+WORDPRESS
+  php --version
+  mariadb --version
+  sudo dnf install php-curl php-xml php-imagick php-mbstring php-zip php-intl
+  Php-imagick did not work:
+  dnf install -y epel-release
+  dnf config-manager --set-enabled PowerTools
+  Sudo dnf install -y ImageMagick ImageMagick-devel
+    “You should add "extension=imagick.so" to php.ini” message
+  echo "extension=imagick.so" > /etc/php.d/20-imagick.ini
+    Did not work
+  Cd /etc
+    Sudo nano php.ini paste in “extension=imagick.so”
+  
+  Followed the instructions from project 1, save for the above notes^
+
+
        
      </article>
       
