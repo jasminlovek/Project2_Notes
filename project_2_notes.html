@@ -36,6 +36,7 @@
     a. x= the version you want. I went with the version we used from project 1
   4. sudo dnf install php php-cli php-gd php-curl php-zip php-mbstring
     a. Install extensions
+    b. sudo systemctl restart httpd
   5.Added an index.php to /var/wwww/html
   6.cd /etc/httpd/conf
   7.Ls: found httpd.conf
@@ -54,6 +55,7 @@
        gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
        gpgcheck=1 
   3. Update system
+        a. sudo systemctl restart httpd
   4. sudo dnf install MariaDB-server
   5. sudo systemctl enable --now mariadb
   6. systemctl status mariadb
@@ -112,25 +114,26 @@ All steps from project 1 were used, save for (most of the) the above steps^
   2. Checking versions for compatibility
     a.php --version
     b.mariadb --version
-  3. sudo dnf config-manager --set-enabled powertools
-
-  sudo dnf install php-curl php-xml php-imagick php-mbstring php-zip php-intl
-    a.
-  Php-imagick did not work:
-  dnf install -y epel-release
-  dnf config-manager --set-enabled PowerTools
-  Sudo dnf install -y ImageMagick ImageMagick-devel
-    “You should add "extension=imagick.so" to php.ini” message
-  echo "extension=imagick.so" > /etc/php.d/20-imagick.ini
-    Did not work
-  Cd /etc
-    Sudo nano php.ini paste in “extension=imagick.so”
-  
+  4. install wget using the following: sudo dnf install wget
+  5. sudo dnf config-manager --set-enabled powertools
+  6.sudo dnf install php-curl php-xml php-imagick php-mbstring php-zip php-intl
+    a.sudo systemctl restart httpd
+    b.sudo systemctl restart mariadb
+  Note: Php-imagick did not work:
+  7. dnf install -y epel-release
+  8. dnf config-manager --set-enabled PowerTools
+  9. Sudo dnf install -y ImageMagick ImageMagick-devel
+    a. Received message “You should add "extension=imagick.so" to php.ini” message
+    b. tried: echo "extension=imagick.so" > /etc/php.d/20-imagick.ini
+      1. Did not work
+  10. Cd /etc
+    a. Sudo nano php.ini paste in “extension=imagick.so”
+  11. cd /var/www/html
+    a. wget http://WordPress.org/latest.tar.gz
+  12. tar -xzvf latest.tar.gz
+  13. Followed steps from project 1
+  14. Change file ownership
+    a. In /var/www/html/wordpress
+      1. sudo chown -R apache:apache *
+        a. apache sub for www-data
   Followed the instructions from project 1, save for the above notes^
-
-
-       
-     </article>
-      
-  </body>
-</html>
