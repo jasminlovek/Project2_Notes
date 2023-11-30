@@ -1,60 +1,83 @@
-Apache Install 
-  sudo dnf update -y
-  sudo dnf install httpd
-  Note Version
-  sudo httpd -v
-    Tells version
-  sudo systemctl start httpd
-  systemctl enable httpd
-  systemctl status httpd
-  34.125.2.166 external ip
-  Cd /var/www/html
-  sudo dnf update -y
-  sudo dnf install nano -y
-  /etc/httpd/conf.d/welcome.conf.
-    Ls
-  cd /usr/share/httpd/noindex/
-    Index.html is here!
-      Editing this changed the page
-  Created a new index.html in /var/www/html
-  All steps followed from project 1, save for above notes^
+<---Apache Install--->
+  1.sudo dnf update -y
+    a.It is important to update the system
+  2.sudo dnf install httpd
+    a. (Apache)
+  3.sudo httpd -v
+    a.Tells you which version
+  4.sudo systemctl start httpd
+    a. Starts up apache
+  5.systemctl enable httpd
+    a. Runs Apache
+  6.systemctl status httpd
+    a. Checks if apache is running
+  7. Go to external IP address (34.125.2.166)
+  8.Cd /var/www/html
+  9.sudo dnf update -y
+    a. Just decided to do this
+  10.sudo dnf install nano -y
+  *-Journey to find index.html-*
+  *-(This was before I realized I needed to just make a new index.html file in /var/www/html)-*
+  11./etc/httpd/conf.d/welcome.conf.
+  12.Ls
+    a. Listed what was in there
+  13.cd /usr/share/httpd/noindex/
+  14.ls
+    a.Index.html is here!
+    b.Editing this changed the page
+  15.Created a new index.html in /var/www/html
+  All other steps were followed from project 1, save for above notes^
 
-  Installing PHP on Rocky Linux
-  sudo dnf update -y
-  sudo dnf module enable php:version from project 1
-  $ sudo dnf module enable php:version from project 1
-  $ sudo dnf install php php-cli php-gd php-curl php-zip php-mbstring
-  Added an index.php
-  cd /etc/httpd/conf
-    Ls : httpd.conf
-      Directoryindex: Make index.php first
-  All steps from project 1 were used, save for the above^
+  <---Installing PHP on Rocky Linux--->
+  1.sudo dnf update -y
+  2.sudo dnf module enable php:x
+    a. x= the version you want. I went with the version we used from project 1
+  3.sudo dnf module enable php:x
+    a. x= the version you want. I went with the version we used from project 1
+  4. sudo dnf install php php-cli php-gd php-curl php-zip php-mbstring
+    a. Install extensions
+  5.Added an index.php to /var/wwww/html
+  6.cd /etc/httpd/conf
+  7.Ls: found httpd.conf
+  8. sudo nano httpd.conf 
+    a.Directoryindex: Made index.php first
+  All steps from project 1 were used, save for the above steps^
 
-
-MARIADB: 
-  sudo systemctl enable --now mariadb
-  systemctl status mariadb
-  Secure db server: sudo mysql_secure_installation
-  Password: made
-  Remove anonymous users? Y
-  Disallow root login remotely? Y
-  Reload privilege tables now? Y
-  Sudosu = root user
-  Whoami = tells you
-   mariadb -u root
-   create user 'webapp'@'localhost' identified by 'password';
-  MariaDB [(none)]> create database linuxdb;
-  MariaDB [(none)]> grant all privileges on linuxdb.* to 'webapp'@'localhost';
-    * is there so for every table this person has access
-  \q to quit
-  Exit to exit root user
-  mariadb -u webapp -p
-    Enter password: passworddas
-  Use linuxdb;
-  Ctrl L to clear screen
-  
-  
-  MariaDB [(linuxdb)]> create table distributions
+<---MARIADB:---> 
+  1. sudo nano /etc/yum.repos.d/mariadb.repo
+    a. Creates a place where we can manually install mariadb
+  2. Paste the following in
+    a. [mariadb]
+       name = MariaDB
+       baseurl = http://yum.mariadb.org/10.5/rhel8-amd64
+       module_hotfixes=1
+       gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+       gpgcheck=1 
+  3. Update system
+  4. sudo dnf install MariaDB-server
+  5. sudo systemctl enable --now mariadb
+  6. systemctl status mariadb
+  7. For a Secure db server: sudo mysql_secure_installation
+  8. Password: made
+  9. Remove anonymous users? Y
+  10.Disallow root login remotely? Y
+  11.Reload privilege tables now? Y
+  12.Sudosu 
+    a.root user
+  13.Whoami
+  14.mariadb -u root
+  15.create user 'webapp'@'localhost' identified by 'password';
+  16.create database linuxdb;
+  17.grant all privileges on linuxdb.* to 'webapp'@'localhost';
+    a."*" is there so for every table this person has access
+  18.\q to quit
+  19.Exit
+    a.to exit root user
+  20.mariadb -u webapp -p
+    a.Enter password:
+  21.Use linuxdb;
+    a. CTRL + L to clear screen
+  22.MariaDB [(linuxdb)]> create table distributions
       -> (
       -> id int unsigned not null auto_increment,
       -> name varchar(150) not null,
@@ -63,34 +86,36 @@ MARIADB:
       -> primary key (id)
       -> );
   Query OK, 0 rows affected (0.07 sec)
-  
-  MariaDB [(linuxdb)]> show tables;
-  MariaDB [(linuxdb)]> describe distributions;
+  23.MariaDB [(linuxdb)]> show tables;
+  24.MariaDB [(linuxdb)]> describe distributions;
+      MariaDB [(linuxdb)]> insert into distributions (name, developer, founded) values
+            -> ('Debian', 'The Debian Project', '1993-09-15'),
+            -> ('Ubuntu', 'Canonical Ltd.', '2004-10-20'),
+            -> ('Fedora', 'Fedora Project', '2003-11-06');
+      Query OK, 3 rows affected (0.004 sec)
+      Records: 3  Duplicates: 0  Warnings: 0
+  25.MariaDB [(linuxdb)]> select * from distributions;
+      MariaDB [(linuxdb)]> alter table distributions
+       -> add packagemanager char(3) after name;
+      update distributions set packagemanager='APT' where id='1';
+      update distributions set packagemanager='APT' where id='2';
+      MariaDB [(linuxdb)]> update distributions set packagemanager='DNF' where id='3';
+  26.[jasmi@vm2-2023 html]$ sudo chown :apache login.php
+    a. apache is equivalent to www-data
+    b.Instead of chown :www-data
+  27.Sudo dnf install php-mysqli
+    a. Helped make things work better
+All steps from project 1 were used, save for (most of the) the above steps^
 
+<---WORDPRESS--->
+  1. sudo dnf update
+  2. Checking versions for compatibility
+    a.php --version
+    b.mariadb --version
+  3. sudo dnf config-manager --set-enabled powertools
 
-  MariaDB [(linuxdb)]> insert into distributions (name, developer, founded) values
-      -> ('Debian', 'The Debian Project', '1993-09-15'),
-      -> ('Ubuntu', 'Canonical Ltd.', '2004-10-20'),
-      -> ('Fedora', 'Fedora Project', '2003-11-06');
-  Query OK, 3 rows affected (0.004 sec)
-  Records: 3  Duplicates: 0  Warnings: 0
-  MariaDB [(linuxdb)]> select * from distributions;
-
-
-  MariaDB [(linuxdb)]> alter table distributions
-   -> add packagemanager char(3) after name;
-  update distributions set packagemanager='APT' where id='1';
-  update distributions set packagemanager='APT' where id='2';
-  MariaDB [(linuxdb)]> update distributions set packagemanager='DNF' where id='3';
-  [jasmi@vm2-2023 html]$ sudo chown :apache login.php
-  Instead of chown :www-data
-  Sudo dnf install php-mysqli
-
-
-WORDPRESS
-  php --version
-  mariadb --version
   sudo dnf install php-curl php-xml php-imagick php-mbstring php-zip php-intl
+    a.
   Php-imagick did not work:
   dnf install -y epel-release
   dnf config-manager --set-enabled PowerTools
